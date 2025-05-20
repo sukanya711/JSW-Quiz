@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JSW Safety Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+    #loginContainer {
+  animation: fadeInSlide 1s ease-out;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #007bff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px 50px;
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+#loginContainer h2 {
+  font-size: 28px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+#loginContainer p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+#loginContainer input[type="text"],
+#loginContainer input[type="password"] {
+  padding: 12px;
+  width: 85%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  transition: border-color 0.3s ease;
+}
+
+#loginContainer input[type="text"]:focus,
+#loginContainer input[type="password"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+}
+
+#loginContainer button {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#loginContainer button:hover {
+  background: linear-gradient(135deg, #0056b3, #004080);
+}
+
+@keyframes fadeInSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+#customAlert {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#alertBox {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  animation: popUp 0.3s ease-in-out;
+}
+
+#alertBox p {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+#alertBox button {
+  padding: 10px 25px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#alertBox button:hover {
+  background: #0056b3;
+}
+
+    .quiz-container, #loginContainer {
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1, h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    #question {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #f0f0f0;
+      padding: 15px;
+      margin: 12px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      font-size: 16px;
+    }
+
+    li:hover {
+      background: #e0f7fa;
+    }
+
+    li.selected {
+      background: #b2ebf2;
+      border-color: #00acc1;
+      font-weight: bold;
+    }
+
+    #nextBtn {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    #nextBtn:hover {
+      background: #0056b3;
+    }
+
+    #score {
+      font-size: 22px;
+      margin-top: 30px;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    #congratsMsg {
+      margin-top: 20px;
+      font-size: 24px;
+      color: gold;
+      animation: popUp 1s ease-in-out;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .progress-container {
+      width: 100%;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      height: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background-color: #4caf50;
+      transition: width 0.3s ease;
+    }
+
+    #timer {
+      font-size: 16px;
+      color: #ff5722;
+      margin-bottom: 10px;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      animation: fall 3s linear infinite;
+      z-index: 1000;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    @keyframes popUp {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    #certificate {
+      background: white;
+      padding: 30px;
+      margin-top: 20px;
+      border: 3px solid gold;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #333;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #certificate h2 {
+      color: #007bff;
+    }
+
+    #printBtn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #printBtn:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="loginContainer">
+  <h2>Welcome to the Safety Quiz</h2>
+  <p>Enter your login details to begin:</p>
+  <input type="text" id="username" placeholder="Username" style="padding: 10px; width: 80%; border-radius: 5px; margin-bottom: 10px;" /><br />
+  <input type="password" id="password" placeholder="Password" style="padding: 10px; width: 80%; border-radius: 5px; margin-bottom: 15px;" /><br />
+  <button onclick="startQuiz()" style="padding: 12px 30px; font-size: 16px; cursor: pointer; border: none; background: #007bff; color: white; border-radius: 8px;">Start Quiz</button>
+</div>
+
+  <!-- Quiz App -->
+  <div class="quiz-container hidden" id="quizApp">
+    <h1>JSW  Safety Quiz </h1>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div id="timer">Time left: 10s</div>
+    <div id="question">Loading question...</div>
+    <ul id="options"></ul>
+    <button id="nextBtn">Next</button>
+    <div id="score" class="hidden"></div>
+    <div id="congratsMsg" class="hidden"> 🎉congragulation for completing the quiz🎉 </div>
+    <div id="certificate" class="hidden">
+      <h2>Certificate of Achievement</h2>
+      <p>Well done, <span id="certName"></span>! You passed the quiz with a score of:</p>
+      <p id="certScoreText"></p>
+      <button id="printBtn" onclick="window.print()">Print Certificate</button>
+    </div>
+  </div>
+
+  <audio id="successSound" src="C:\Users\sukan\Downloads\successSound.wav" preload="auto"></audio>
+  <audio id="Clapping-sound-effect" src="C:\Users\sukan\Downloads\Clapping-sound-effect.mp3" preload="auto"></audio>
+
+  <script>
+const Quiz = [
+  { question: "What does PPE stand for?", options: ["Proper Production Equipment", "Personal Protective Equipment", "Portable Protective Equipment", "Permanent Protection Element"], answer: "Personal Protective Equipment" },
+  { question: "Which of the following is NOT a type of hazard?", options: ["Chemical", "Biological", "Emotional", "Physical"], answer: "Emotional" },
+  { question: "What is the purpose of a Safety Data Sheet (SDS)?", options: ["To store chemicals", "To guide equipment operation", "To provide safety info on substances", "To report injuries"], answer: "To provide safety info on substances" },
+  { question: "Which sign color is used for mandatory safety instructions?", options: ["Red", "Yellow", "Blue", "Green"], answer: "Blue" },
+  { question: "A ‘near miss’ is:", options: ["A small accident", "An unreported incident", "An event that almost caused harm", "A close inspection"], answer: "An event that almost caused harm" },
+  { question: "How often should a safety audit be conducted?", options: ["Once in 5 years", "Monthly", "Periodically as per policy", "Never"], answer: "Periodically as per policy" },
+  { question: "What is the difference between a hazard and a risk?", options: ["Hazard is the outcome, risk is the source", "Hazard is the danger, risk is the likelihood", "Hazard is small, risk is big", "No difference"], answer: "Hazard is the danger, risk is the likelihood" },
+  { question: "Why is a safety induction important?", options: ["To increase salary", "To ensure workers understand safety rules", "To assign daily tasks", "To train in production"], answer: "To ensure workers understand safety rules" },
+  { question: "Which of these is a common cause of workplace accidents?", options: ["Lack of training", "Too much rest", "Long lunch breaks", "High salaries"], answer: "Lack of training" },
+  { question: "What color is used for caution signs?", options: ["Blue", "Red", "Green", "Yellow"], answer: "Yellow" },
+  { question: "Which fire extinguisher is used for electrical fires?", options: ["Water", "Foam", "CO₂", "Dry sand"], answer: "CO₂" },
+  { question: "Class A fire includes:", options: ["Oil fires", "Electrical fires", "Solid combustibles", "Gas fires"], answer: "Solid combustibles" },
+  { question: "Before using a fire extinguisher, you must:", options: ["Shake it", "Check pressure and expiry", "Heat it", "Test it on floor"], answer: "Check pressure and expiry" },
+  { question: "What is the purpose of Lockout/Tagout (LOTO)?", options: ["Locking factory gates", "Isolating energy sources during maintenance", "Switching off lights", "Filing safety forms"], answer: "Isolating energy sources during maintenance" },
+  { question: "Which of the following is a fire safety device?", options: ["PLC", "Fire hydrant", "Grinder", "Overhead crane"], answer: "Fire hydrant" },
+  { question: "Electrical PPE includes:", options: ["Steel gloves", "Rubber gloves and insulating mats", "Cotton gloves", "None of the above"], answer: "Rubber gloves and insulating mats" },
+  { question: "Which class of fire involves flammable liquids?", options: ["Class A", "Class B", "Class C", "Class D"], answer: "Class B" },
+  { question: "During an electrical fire, you should NEVER:", options: ["Use a CO₂ extinguisher", "Use water", "Call emergency team", "Switch off power"], answer: "Use water" },
+  { question: "What is a machine guard used for?", options: ["Decoration", "Prevent contact with moving parts", "Cooling", "Speed control"], answer: "Prevent contact with moving parts" },
+  { question: "An emergency stop switch should be:", options: ["Hidden", "Easily accessible", "Behind the panel", "Optional"], answer: "Easily accessible" },
+  { question: "Which of these requires LOTO before maintenance?", options: ["Coffee machine", "Conveyor belt", "Water bottle", "Office chair"], answer: "Conveyor belt" },
+  { question: "What is a common hazard of rotating machinery?", options: ["Noise", "Entanglement", "Smell", "Pollution"], answer: "Entanglement" },
+  { question: "Lifting equipment should be inspected:", options: ["Never", "Yearly", "Regularly", "Only after an incident"], answer: "Regularly" },
+  { question: "Safe lifting technique includes:", options: ["Bending from the back", "Using only one hand", "Keeping the load close to your body", "Lifting quickly"], answer: "Keeping the load close to your body" },
+  { question: "Before handling chemicals, always check:", options: ["Label and SDS", "Smell", "Color", "Expiry only"], answer: "Label and SDS" },
+  { question: "What should be done in a chemical spill?", options: ["Ignore it", "Inform and follow spill protocol", "Use water", "Cover with paper"], answer: "Inform and follow spill protocol" },
+  { question: "Confined space entry requires:", options: ["Water bottle", "Entertainment", "Work permit and gas check", "Sunglasses"], answer: "Work permit and gas check" },
+  { question: "HAZOP is a process used to:", options: ["Manufacture steel", "Identify process hazards", "Train HR", "Inspect fire extinguishers"], answer: "Identify process hazards" },
+  { question: "Chemical PPE includes:", options: ["Fire boots", "Leather jacket", "Chemical splash goggles and gloves", "None"], answer: "Chemical splash goggles and gloves" },
+  { question: "How should chemicals be stored?", options: ["On open ground", "In the canteen", "In labeled, ventilated areas", "Under sunlight"], answer: "In labeled, ventilated areas" },
+];
+
+    const questions = Quiz.sort(() => 0.5 - Math.random()).slice(0, 10);
+    let currentQuestion = 0;
+    let score = 0;
+    let selectedOption = null;
+    let timer;
+    let timeLeft = 10;
+    let userName = "";
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const scoreEl = document.getElementById("score");
+    const progressBar = document.getElementById("progressBar");
+    const timerEl = document.getElementById("timer");
+    const successSound = document.getElementById("successSound");
+    const congratsMsg = document.getElementById("congratsMsg");
+    const certificate = document.getElementById("certificate");
+    const certScoreText = document.getElementById("certScoreText");
+    const certName = document.getElementById("certName");
+
+    function startQuiz() {
+  const nameInput = document.getElementById("username").value.trim();
+  const passwordInput = document.getElementById("password").value.trim();
+
+  if (!nameInput && !passwordInput) {
+    showAlert("Please enter both username and password.");
+    return;
+  }
+
+  if (!nameInput) {
+    showAlert("Username cannot be empty.");
+    return;
+  }
+
+  if (!passwordInput) {
+    showAlert("Password cannot be empty.");
+    return;
+  }
+
+  userName = nameInput;
+  document.getElementById("loginContainer").style.display = "none";
+  document.getElementById("quizApp").classList.remove("hidden");
+  loadQuestion();
+}
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+      optionsEl.innerHTML = "";
+      selectedOption = null;
+
+      q.options.forEach(option => {
+        const li = document.createElement("li");
+        li.textContent = option;
+        li.onclick = () => {
+          document.querySelectorAll("#options li").forEach(li => li.classList.remove("selected"));
+          li.classList.add("selected");
+          selectedOption = option;
+        };
+        optionsEl.appendChild(li);
+      });
+
+      updateProgressBar();
+      startTimer();
+    }
+
+    function updateProgressBar() {
+      const progressPercent = ((currentQuestion) / questions.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timeLeft = 10;
+      timerEl.textContent = `Time left: ${timeLeft}s`;
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = `Time left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          autoMove();
+        }
+      }, 1000);
+    }
+
+    function autoMove() {
+      if (!selectedOption) selectedOption = "";
+      nextBtn.click();
+    }
+
+    nextBtn.onclick = () => {
+      clearInterval(timer);
+
+      if (!selectedOption) {
+        alert("Please select an answer.");
+        return;
+      }
+
+      if (selectedOption === questions[currentQuestion].answer) {
+        score++;
+        successSound.play();
+      }
+
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+        questionEl.classList.add("hidden");
+        optionsEl.classList.add("hidden");
+        nextBtn.classList.add("hidden");
+        timerEl.classList.add("hidden");
+        progressBar.style.width = "100%";
+        scoreEl.classList.remove("hidden");
+        scoreEl.textContent = `You scored ${score}/${questions.length}`;
+        congratsMsg.classList.remove("hidden");
+
+        if (score >= 7) {
+  certificate.classList.remove("hidden");
+  certScoreText.textContent = `${score} out of 10`;
+  certName.textContent = userName;
+  launchConfetti();
+  document.getElementById("Clapping-sound-effect").play();
+        }else {
+          certText.textContent = `Better luck next time, ${userName}!`;
+          certScoreText.textContent = `You scored ${score} out of 10`;
+        }
+    }
+      };
+
+    function launchConfetti() {
+      for (let i = 0; i < 100; i++) {
+        let confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    }
+  </script>
+</body>
+</html>
